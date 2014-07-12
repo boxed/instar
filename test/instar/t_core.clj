@@ -9,18 +9,18 @@
 (def test-state2 {:foo {:1 {:q1 {:a 1}}, :2 {:q2 2}, :3 {:q3 3}}})
 
 (fact
-  (expand-path test-state1 [:foo :* :q1]) =>
+  (expand-path test-state1 [:foo * :q1]) =>
      #{[:foo :1 :q1] [:foo :2 :q1] [:foo :3 :q1]}
-  (expand-path test-state1 [:foo :*]) =>
+  (expand-path test-state1 [:foo *]) =>
      #{[:foo :1] [:foo :2] [:foo :3]}
   (expand-path :_ [:foo :bar]) =>
      #{[:foo :bar]}
-  (expand-path test-state2 [:foo :* :*]) =>
+  (expand-path test-state2 [:foo * *]) =>
      #{[:foo :1 :q1] [:foo :2 :q2] [:foo :3 :q3]}
-  (expand-path test-state2 [:foo :* :* :*]) =>
+  (expand-path test-state2 [:foo * * *]) =>
      #{[:foo :1 :q1 :a]}
 
-  (resolve-paths-for-transform test-state2 [[:foo :* :* :*] noop]) =>
+  (resolve-paths-for-transform test-state2 [[:foo * * *] noop]) =>
      [[:foo :1 :q1 :a] noop]
 )
 
@@ -48,9 +48,9 @@
           ["another link" "nick2"]]})
 (fact
   (transform state
-    [:votes :*] #(assoc %1 :votes (count (:voters %1)))
-    [:votes :*] #(assoc %1 :did-vote (contains? (:voters %1) "not-a-matching-ip"))
-    [:votes :*] #(dissoc % :voters)
-    [:votes :*] #(dissoc % :author-ip)
+    [:votes *] #(assoc %1 :votes (count (:voters %1)))
+    [:votes *] #(assoc %1 :did-vote (contains? (:voters %1) "not-a-matching-ip"))
+    [:votes *] #(dissoc % :voters)
+    [:votes *] #(dissoc % :author-ip)
     [:links] #(for [[x y z] %] [x y])) => target-state
  )

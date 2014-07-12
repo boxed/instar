@@ -1,5 +1,6 @@
 (ns instar.core)
 
+(def ^:private STAR *)
 
 (defn ^:private split-at-exclusive [index path]
   (let [[a b] (split-at index path)]
@@ -7,7 +8,7 @@
      (into [] (drop 1 b))]))
 
 (defn expand-path-once [state path]
-  (let [index-of-star (.indexOf path :*)]
+  (let [index-of-star (.indexOf path STAR)]
     (if (= index-of-star -1)
       [path]
       (let [[path-base path-rest] (split-at-exclusive index-of-star path)]
@@ -23,7 +24,7 @@
         result (java.util.ArrayList. [])]
     (while (not (.isEmpty paths))
       (let [path (.remove ^java.util.ArrayList paths (int (- (.size paths) 1)))]
-        (if (= (.indexOf path :*) -1)
+        (if (= (.indexOf path STAR) -1)
           (.add result path)
           (.addAll paths (expand-path-once state path)))))
     (into #{} result)))

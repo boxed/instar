@@ -32,10 +32,10 @@ transformation:
 
 ```clojure
 (transform big-map
-  [:votes :*] #(assoc %1 :votes (count (:voters %1)))
-  [:votes :*] #(assoc %1 :did-vote (contains? (:voters %1) "74.125.232.96"))
-  [:votes :*] #(dissoc % :voters)
-  [:votes :*] #(dissoc % :author-ip)
+  [:votes *] #(assoc %1 :votes (count (:voters %1)))
+  [:votes *] #(assoc %1 :did-vote (contains? (:voters %1) "74.125.232.96"))
+  [:votes *] #(dissoc % :voters)
+  [:votes *] #(dissoc % :author-ip)
   [:links] #(for [[x y z] %] [x y]))
 ```
 
