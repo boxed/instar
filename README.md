@@ -1,7 +1,9 @@
 # Instar
 
 > Instar |ˈɪnstɑː|
+>
 > noun Zoology
+>
 > A phase between two periods of moulting in the development of an insect larva or other invertebrate animal.
 >
 > ORIGIN late 19th cent.: from Latin, literally ‘form, likeness’.
