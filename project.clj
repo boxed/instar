@@ -1,5 +1,5 @@
 (defproject instar "1.0.0"
-  :description "transform nested data structures easily"
+  :description "Transform nested data structures easily"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojurescript "0.0-2173"]]
   :jar-exclusions [#"\.cljx|\.swp|\.swo|\.DS_Store"]
@@ -10,8 +10,11 @@
             [lein-cljsbuild "1.0.2"]]
   :uberjar-name "instar.jar"
 
-  :license "MIT"
+  :license {:name "MIT"
+            :url "http://opensource.org/licenses/MIT"}
   :url "https://github.com/boxed/instar"
+  :scm {:name "git"
+        :url "https://github.com/boxed/instar"}
 
   :hooks [cljx.hooks
           leiningen.cljsbuild]
