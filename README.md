@@ -9,9 +9,21 @@
 > ORIGIN late 19th cent.: from Latin, literally ‘form, likeness’.
 
 Instar is a transformation library for nested data structures. That sounds
-pretty abstract, so let's discuss an example:
+pretty abstract, scroll down to the example section for an explanation.
 
-We have the following data structure:
+## Installation
+
+Add the following dependency to your `project.clj` file:
+
+```clojure
+    [instar "1.0.0"]
+```
+
+## Example
+
+This example is based on an actual use case for [atpshowbot](https://github.com/boxed/atpshowbot)
+
+Say we have the following data structure:
 
 ```clojure
 (def big-map
