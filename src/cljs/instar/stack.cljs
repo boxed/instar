@@ -17,7 +17,7 @@
   (push-all! #js [] initial))
 
 (defn empty? [stack]
-  (= (length stack) 0))
+  (= (.length stack) 0))
 
 (defn not-empty? [stack]
   (not (empty? stack)))
