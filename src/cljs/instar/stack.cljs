@@ -14,7 +14,7 @@
   (.indexOf stack sym))
 
 (defn stack [initial]
-  (push-all! (clj->js initial)))
+  (clj->js initial))
 
 (defn empty? [stack]
   (= (.length stack) 0))
