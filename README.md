@@ -16,7 +16,7 @@ pretty abstract, scroll down to the example section for an explanation.
 Add the following dependency to your `project.clj` file:
 
 ```clojure
-    [instar "1.0.0"]
+    [instar "1.0.4"]
 ```
 
 ## Example
