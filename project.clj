@@ -1,4 +1,4 @@
-(defproject instar "1.0.3"
+(defproject instar "1.0.4"
   :description "Transform nested data structures easily"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojurescript "0.0-2173"]]
