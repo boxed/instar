@@ -1,5 +1,7 @@
 # Instar
 
+[![Build Status](https://travis-ci.org/boxed/instar.svg?branch=master)](https://travis-ci.org/boxed/instar)
+
 > Instar |ˈɪnstɑː|
 >
 > noun Zoology
@@ -63,5 +65,3 @@ The output becomes:
  :links (["link" "nick1"]
          ["another link" "nick2"])}
 ```
-
-[![Build Status](https://travis-ci.org/boxed/instar.svg?branch=master)](https://travis-ci.org/boxed/instar)
