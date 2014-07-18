@@ -27,8 +27,6 @@
                                            :pretty-print true}}}}
 
   ; - cljx config -
-  :hooks []
-
   :cljx {:builds [{:source-paths ["src/cljx" "src/clj"]
                    :output-path "target/classes"
                    :rules :clj}
