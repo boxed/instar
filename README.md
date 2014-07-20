@@ -17,9 +17,7 @@ pretty abstract, scroll down to the example section for an explanation.
 
 Add the following dependency to your `project.clj` file:
 
-```clojure
-    [instar "1.0.4"]
-```
+[![Clojars Project](http://clojars.org/instar/latest-version.svg)](http://clojars.org/instar)
 
 ## Example
 
