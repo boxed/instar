@@ -25,7 +25,17 @@
 
   (resolve-paths-for-transform test-state2 [[:foo * * *] noop]) =>
      [[:foo :1 :q1 :a] noop]
+
+  (expand-path {:foo 1 :bar 2} [*]) =>
+     #{[:foo] [:bar]}
 )
+
+(fact
+  (transform test-state1
+             [:foo] dissoc) => {}
+  (transform test-state1
+             [*] dissoc) => {}
+ )
 
 ; This example is based on a use case from https://github.com/boxed/atpshowbot
 
@@ -53,6 +63,14 @@
     [:votes *] #(assoc %1 :did-vote (contains? (:voters %1) "not-a-matching-ip"))
     [:votes *] #(dissoc % :voters)
     [:votes *] #(dissoc % :author-ip)
+    [:links] #(for [[x y z] %] [x y])) => target-state
+
+  ; Same as above...
+  (transform state
+    [:votes *] #(assoc %1 :votes (count (:voters %1)))
+    [:votes *] #(assoc %1 :did-vote (contains? (:voters %1) "not-a-matching-ip"))
+    [:votes * :voters] dissoc
+    [:votes * :author-ip] dissoc
     [:links] #(for [[x y z] %] [x y])) => target-state
 
   ; Same as above...

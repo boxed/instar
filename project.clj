@@ -1,10 +1,9 @@
-(defproject instar "1.0.5"
+(defproject instar "1.0.6"
   :description "Transform nested data structures easily"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojurescript "0.0-2173"]]
   :jar-exclusions [#"\.cljx|\.swp|\.swo|\.DS_Store"]
   :source-paths ["src/cljx" "src/clj" "src/cljs"]
-  :test-paths ["target/test-classes"]
   :profiles {:dev {:dependencies [[midje "1.5.0"]]}}
   :plugins [[com.keminglabs/cljx "0.4.0"]
             [lein-cljsbuild "1.0.2"]

@@ -42,10 +42,13 @@
   (let [pairs (partition 2 args)]
     (reduce
      (fn [state [path f]]
-       (update-in state path f))
+       (if (= f dissoc) ; This is a special case for usability purposes
+         (if (= (count path) 1) ; update-in doesn't support empty path: http://dev.clojure.org/jira/browse/CLJ-373
+           (dissoc state (last path))
+           (update-in state (drop-last 1 path) #(dissoc % (last path))))
+         (update-in state path f)))
      m
-     pairs
-     )))
+     pairs)))
 
 (defn transform [m & args]
   (let [x (resolve-paths-for-transform m args)]

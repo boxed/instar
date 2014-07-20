@@ -49,7 +49,7 @@ transformation:
   [:votes *] #(assoc %1 :votes (count (:voters %1)))
   [:votes *] #(assoc %1 :did-vote (contains? (:voters %1) "74.125.232.96"))
   [:votes *] #(dissoc % :voters)
-  [:votes *] #(dissoc % :author-ip)
+  [:votes * :author-ip] dissoc ; This is functionally the same as the dissoc above, but is a bit nicer to read
   [:links] #(for [[x y z] %] [x y]))
 ```
 
