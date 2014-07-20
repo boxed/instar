@@ -1,4 +1,5 @@
-(ns instar.stack)
+(ns instar.stack
+    (:refer-clojure :exclude [pop! empty?]))
 
 (defn pop! [stack]
   (.remove ^java.util.ArrayList stack (int (- (.size stack) 1))))
