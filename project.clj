@@ -7,7 +7,8 @@
   :profiles {:dev {:dependencies [[midje "1.5.0"]]}}
   :plugins [[com.keminglabs/cljx "0.4.0"]
             [lein-cljsbuild "1.0.2"]
-            [lein-midje "3.0.0"]]
+            [lein-midje "3.0.0"]
+            [midje-readme "1.0.0"]]
   :uberjar-name "instar.jar"
 
   :license {:name "MIT"

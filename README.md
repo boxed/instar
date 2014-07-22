@@ -49,17 +49,43 @@ transformation:
   [:votes *] #(dissoc % :voters)
   [:votes * :author-ip] dissoc ; This is functionally the same as the dissoc above, but is a bit nicer to read
   [:links] #(for [[x y z] %] [x y]))
-```
 
-The output becomes:
+  =>
 
-```clojure
 {:votes {"title1" {:did-vote true,
                    :votes 2,
                    :author "nick1"},
          "title2" {:did-vote true,
                    :votes 2,
                    :author "nick2"}},
- :links (["link" "nick1"]
-         ["another link" "nick2"])}
+ :links [["link" "nick1"]
+         ["another link" "nick2"]]}
+```
+
+## Other features
+
+Short form for dissoc:
+
+```clojure
+
+(transform {:foo 1, :bar 1}
+           [:foo] dissoc)
+
+ =>
+
+ {:bar 1}
+
+```
+
+Short form for setting values:
+
+```clojure
+
+(transform {:foo 1}
+           [:foo] "hello")
+
+=>
+
+{:foo "hello"}
+
 ```

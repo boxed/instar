@@ -35,6 +35,12 @@
              [:foo] dissoc) => {}
   (transform test-state1
              [*] dissoc) => {}
+  (transform {}
+             [:foo] 1) => {:foo 1}
+
+;; TODO:
+;  (transform [1 2 3 4]
+;             [even?] inc) => [1 3 3 5]
  )
 
 ; This example is based on a use case from https://github.com/boxed/atpshowbot

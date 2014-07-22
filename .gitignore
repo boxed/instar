@@ -2,3 +2,5 @@ target
 .nrepl-port
 .lein-repl-history
 pom.xml
+test/readme.clj
+pom.xml.asc
