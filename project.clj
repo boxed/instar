@@ -1,5 +1,5 @@
 (defproject instar "1.0.6"
-  :description "Transform nested data structures easily"
+  :description "Simpler and more powerful assoc/dissoc/update-in"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojurescript "0.0-2173"]]
   :jar-exclusions [#"\.cljx|\.swp|\.swo|\.DS_Store"]

@@ -10,7 +10,7 @@
 >
 > ORIGIN late 19th cent.: from Latin, literally ‘form, likeness’.
 
-Instar is a library to unify assoc, desocc and update-in into a coherent and easy to use whole, while also adding wildcard matching on paths. This creates a simple and powerful function for all transformations.
+Instar is a library to unify assoc, dissoc and update-in into a coherent and easy to use whole, while also adding wildcard matching on paths. This creates a simple and powerful function for all transformations.
 
 ## Examples
 
