@@ -20,8 +20,8 @@ Dissoc multiple keys without needing to use ->
 ; Traditional one dissoc and two:
 (dissoc {:foo 1, :bar 1} :foo) => {:bar 1}
 (-> {:foo 1, :bar 1}
-    (dissoc  :foo)
-    (dissoc  :bar)) => {}
+    (dissoc :foo)
+    (dissoc :bar)) => {}
 
 ; With instar there's a nicer symmetry with one dissoc and two:
 (transform {:foo 1, :bar 1}
@@ -35,20 +35,20 @@ Assoc:
 
 ```clojure
 ; Traditional:
-(assoc {:foo 1} :foo "hello")
+(assoc {:foo 1} :foo "hello") => {:foo "hello"}
 (-> {:foo 1}
     (assoc :foo "hello")
     (assoc :bar "world")) => {:foo "hello", :bar "world"}
 
 ; With instar:
 (transform {:foo 1}
-           [:foo] "hello")
+           [:foo] "hello") => {:foo "hello"}
 (transform {:foo 1}
            [:foo] "hello"
            [:bar] "world") => {:foo "hello", :bar "world"}
 ```
 
-Nested unifies assoc-in, update-in and (the still not in the standard lib) dissoc-in:
+Nested paths unifies assoc-in, update-in and (the still not in the standard lib) dissoc-in:
 
 ```clojure
 ; Traditional:
@@ -120,7 +120,7 @@ This is the transformation to do that:
   [:votes * :author-ip] dissoc
   [:links] #(for [[x y z] %] [x y]))
 
-  =>
+=>
 
 {:votes {"title1" {:did-vote true,
                    :votes 2,
