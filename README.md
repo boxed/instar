@@ -54,7 +54,7 @@ Nested paths unifies assoc-in, update-in and (the still not in the standard lib)
 ; Traditional:
 (assoc-in {} [:foo :bar :baz] 1) => {:foo {:bar {:baz 1}}}
 (update-in {:foo {:bar {:baz 1}}} [:foo :bar :baz] inc) => {:foo {:bar {:baz 2}}}
-(update-in {:foo {:bar {:baz 1}}} [:foo :bar] #(dissoc % :baz)) => {:foo {:bar {}}}
+(update-in {:foo {:bar {:baz 1}}} [:foo :bar] dissoc :baz) => {:foo {:bar {}}}
 
 ; With instar:
 (transform {}
