@@ -1,4 +1,4 @@
-(defproject instar "1.0.6"
+(defproject instar "1.0.7"
   :description "Simpler and more powerful assoc/dissoc/update-in"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojurescript "0.0-2173"]]
@@ -8,7 +8,7 @@
   :plugins [[com.keminglabs/cljx "0.4.0"]
             [lein-cljsbuild "1.0.2"]
             [lein-midje "3.0.0"]
-            [midje-readme "1.0.0"]]
+            [midje-readme "1.0.3"]]
   :uberjar-name "instar.jar"
 
   :license {:name "MIT"

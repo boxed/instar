@@ -3,6 +3,9 @@
 
 (def ^:private STAR *)
 
+(defn ^:private noop [x] x)
+
+
 (defn ^:private split-at-exclusive [index path]
   (let [[a b] (split-at index path)]
     [(into [] a)
@@ -56,3 +59,13 @@
 (defn transform [m & args]
   (let [x (resolve-paths-for-transform m args)]
     (transform-resolved-paths m x)))
+
+(defn get-in-paths [m & args]
+  (let [args-with-bogus-op (apply concat (for [arg args] [arg noop])) ; ..because resolve-paths-for-transform expects pairs
+        paths (resolve-paths-for-transform m args-with-bogus-op)]
+    (for [[p _] (partition 2 paths)]
+      [p (get-in m p)])))
+
+(defn get-values-in-paths [& args]
+  (for [[path value] (apply get-in-paths args)]
+    value))

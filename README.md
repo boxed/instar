@@ -10,68 +10,35 @@
 >
 > ORIGIN late 19th cent.: from Latin, literally ‘form, likeness’.
 
-Instar is a library to unify assoc, dissoc and update-in into a coherent and easy to use whole, while also adding wildcard matching on paths. This creates a simple and powerful function for all transformations.
+Instar is a library to unify assoc, dissoc and update-in into a coherent and easy to use whole, while also adding wildcard matching on paths. This creates a simple and powerful function for all transformations. There are also functions to extract data based on the same path structure.
 
 ## Examples
-
-Dissoc multiple keys without needing to use ->
-
-```clojure
-; Traditional one dissoc and two:
-(dissoc {:foo 1, :bar 1} :foo) => {:bar 1}
-(-> {:foo 1, :bar 1}
-    (dissoc :foo)
-    (dissoc :bar)) => {}
-
-; With instar there's a nicer symmetry with one dissoc and two:
-(transform {:foo 1, :bar 1}
-           [:foo] dissoc) => {:bar 1}
-(transform {:foo 1, :bar 1}
-           [:foo] dissoc
-           [:bar] dissoc) => {}
-```
-
-Assoc:
-
-```clojure
-; Traditional:
-(assoc {:foo 1} :foo "hello") => {:foo "hello"}
-(-> {:foo 1}
-    (assoc :foo "hello")
-    (assoc :bar "world")) => {:foo "hello", :bar "world"}
-
-; With instar:
-(transform {:foo 1}
-           [:foo] "hello") => {:foo "hello"}
-(transform {:foo 1}
-           [:foo] "hello"
-           [:bar] "world") => {:foo "hello", :bar "world"}
-```
 
 Nested paths unifies assoc-in, update-in and (the still not in the standard lib) dissoc-in:
 
 ```clojure
+(def m {:foo {:bar {:baz 1}}})
+
 ; Traditional:
-(assoc-in {} [:foo :bar :baz] 1) => {:foo {:bar {:baz 1}}}
-(update-in {:foo {:bar {:baz 1}}} [:foo :bar :baz] inc) => {:foo {:bar {:baz 2}}}
-(update-in {:foo {:bar {:baz 1}}} [:foo :bar] dissoc :baz) => {:foo {:bar {}}}
+(assoc-in  {} [:foo :bar :baz] 7)      => {:foo {:bar {:baz 7}}}
+(update-in m  [:foo :bar :baz] inc)    => {:foo {:bar {:baz 2}}}
+(update-in m  [:foo :bar] dissoc :baz) => {:foo {:bar {}}}
 
 ; With instar:
-(transform {}
-           [:foo :bar :baz] 1)  => {:foo {:bar {:baz 1}}}
-(transform {:foo {:bar {:baz 1}}}
-           [:foo :bar :baz] inc)  => {:foo {:bar {:baz 2}}}
-(transform {:foo {:bar {:baz 1}}}
-           [:foo :bar :baz] dissoc)  => {:foo {:bar {}}}
+(transform {} [:foo :bar :baz] 7)      => {:foo {:bar {:baz 7}}}
+(transform m  [:foo :bar :baz] inc)    => {:foo {:bar {:baz 2}}}
+(transform m  [:foo :bar :baz] dissoc) => {:foo {:bar {}}}
 ```
 
 Wildcards makes updating multiple values easy:
 
 ```clojure
 (transform {:foo {:bar {:baz 1, :qux 4}
-                  :bar2 {:baz 1, :qux 4}}}
-           [:foo * *] inc)  => {:foo {:bar {:baz 2, :qux 5},
-                                      :bar2 {:baz 2, :qux 5}}}
+                  :bar2 {:baz 2, :qux 5}}}
+           [:foo * *] inc)  
+=> 
+{:foo {:bar {:baz 2, :qux 5},
+       :bar2 {:baz 3, :qux 6}}}
 ```
 
 And the coup de grâce, the combination of all of the above:
@@ -80,7 +47,25 @@ And the coup de grâce, the combination of all of the above:
 (transform {:foo {:bar {:baz 1, :qux 4, :quux 7}}}
            [:foo * *] inc
            [:foobar] "hello"
-           [:foo :bar :baz] dissoc)  => {:foo {:bar {:qux 5, :quux 8}}, :foobar "hello"}
+           [:foo :bar :baz] dissoc)
+=> 
+{:foo {:bar {:qux 5, :quux 8}}, :foobar "hello"}
+```
+
+You can also use instar for getting deep values, either with pairs of [path value] or just the values:
+
+```clojure
+(get-in-paths {:foo {:bar {:baz 1, :qux 4, :quux 7}}}
+              [:foo * *])
+=>
+[[[:foo :bar :quux] 7]
+ [[:foo :bar :qux] 4]
+ [[:foo :bar :baz] 1]]
+
+(get-values-in-paths {:foo {:bar {:baz 1, :qux 4, :quux 7}}}
+                     [:foo * *])
+=>
+[7 4 1]
 ```
 
 ## Installation

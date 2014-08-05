@@ -26,6 +26,12 @@
   (resolve-paths-for-transform test-state2 [[:foo * * *] noop]) =>
      [[:foo :1 :q1 :a] noop]
 
+  (into #{} (for [[path f] (partition 2 (resolve-paths-for-transform test-state1 [[* * *] noop]))] path)) =>
+     #{[:foo :1 :q1]
+       [:foo :2 :q2]
+       [:foo :3 :q3]
+      }
+
   (expand-path {:foo 1 :bar 2} [*]) =>
      #{[:foo] [:bar]}
 )
@@ -41,6 +47,13 @@
 ;; TODO:
 ;  (transform [1 2 3 4]
 ;             [even?] inc) => [1 3 3 5]
+ )
+
+(fact
+  (into #{} (get-in-paths test-state1
+                          [* * *])) =>  #{[[:foo :3 :q3] 3] [[:foo :1 :q1] 1] [[:foo :2 :q2] 2]}
+  (into #{} (get-values-in-paths test-state1
+                          [* * *])) =>  #{3 1 2}
  )
 
 ; This example is based on a use case from https://github.com/boxed/atpshowbot
