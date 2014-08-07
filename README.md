@@ -1,6 +1,7 @@
 # Instar
 
 [![Build Status](https://travis-ci.org/boxed/instar.svg?branch=master)](https://travis-ci.org/boxed/instar)
+[![Examples tested with midje-readme](http://img.shields.io/badge/readme-tested-brightgreen.svg)](https://github.com/boxed/midje-readme)
 
 > Instar |ˈɪnstɑː|
 >
