@@ -51,8 +51,7 @@
              (dissoc state (last path))
              (update-in state (drop-last 1 path) #(dissoc % (last path))))
            (update-in state path f))
-         (assoc-in state path f)
-         ))
+         (assoc-in state path f)))
      m
      pairs)))
 

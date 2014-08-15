@@ -16,6 +16,7 @@
   :url "https://github.com/boxed/instar"
   :scm {:name "git"
         :url "https://github.com/boxed/instar"}
+  :deploy-repositories [["clojars" {:creds :gpg}]]
 
   :hooks [cljx.hooks
           leiningen.cljsbuild]
@@ -33,11 +34,4 @@
                    :rules :clj}
                   {:source-paths ["src/cljx" "src/cljs"]
                    :output-path "target/classes"
-                   :rules :cljs}
-
-                  {:source-paths ["test/cljx" "src/clj"]
-                   :output-path "target/test-classes"
-                   :rules :clj}
-                  {:source-paths ["test/cljx" "src/cljs"]
-                   :output-path "target/test-classes"
                    :rules :cljs}]})
