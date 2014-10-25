@@ -15,7 +15,7 @@
   (.indexOf stack sym))
 
 (defn stack [initial]
-  (clj->js initial))
+  (to-array initial))
 
 (defn empty? [stack]
   (= (.-length stack) 0))

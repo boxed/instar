@@ -101,3 +101,6 @@
                   (dissoc :author-ip))
     [:links] #(for [[x y z] %] [x y])) => target-state
  )
+
+(fact
+  (transform {} [:test] 1) => {:test 1})
