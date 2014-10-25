@@ -20,7 +20,7 @@
 
   :hooks [cljx.hooks]
 
-  :source-paths ["src/clj" "target/classes"]
+  :source-paths ["src/clj" "src/cljs" "target/classes"]
 
   ; - clsj config -
   :cljsbuild
