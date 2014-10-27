@@ -1,4 +1,4 @@
-(defproject instar "1.0.7"
+(defproject instar "1.0.8"
   :description "Simpler and more powerful assoc/dissoc/update-in"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2371"]]
