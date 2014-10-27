@@ -1,14 +1,14 @@
 (defproject instar "1.0.7"
   :description "Simpler and more powerful assoc/dissoc/update-in"
-  :dependencies [[org.clojure/clojure "1.5.1"]
-                 [org.clojure/clojurescript "0.0-2173"]]
+  :dependencies [[org.clojure/clojure "1.6.0"]
+                 [org.clojure/clojurescript "0.0-2371"]]
   :jar-exclusions [#"\.cljx|\.swp|\.swo|\.DS_Store"]
-  :source-paths ["src/cljx" "src/clj" "src/cljs"]
   :profiles {:dev {:dependencies [[midje "1.5.0"]]}}
-  :plugins [[com.keminglabs/cljx "0.4.0"]
-            [lein-cljsbuild "1.0.2"]
+  :plugins [[com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]
             [lein-midje "3.0.0"]
-            [midje-readme "1.0.3"]]
+            [midje-readme "1.0.3"]
+            [lein-pdo "0.1.1"]
+            [com.cemerick/clojurescript.test "0.3.1"]]
   :uberjar-name "instar.jar"
 
   :license {:name "MIT"
@@ -18,20 +18,30 @@
         :url "https://github.com/boxed/instar"}
   :deploy-repositories [["clojars" {:creds :gpg}]]
 
-  :hooks [cljx.hooks
-          leiningen.cljsbuild]
+  :hooks [cljx.hooks]
+
+  :source-paths ["src/clj" "src/cljs" "target/classes"]
 
   ; - clsj config -
-  :cljsbuild {:builds {:client {:source-paths ["target/classes"]
-                                :compiler {:output-dir "target/client"
-                                           :output-to "target/client.js"
-                                           ;:source-map "target/client.js.map"
-                                           :pretty-print true}}}}
+  :cljsbuild
+  {:builds [{:id "client"
+             :source-paths ["src/cljs" "target/classes"]
+             :compiler {:output-dir "target/client"
+                        :output-to "target/client.js"
+                        ;;:source-map "target/client.js.map"
+                        :pretty-print true}}
+            {:id "test"
+             :source-paths ["src/cljs" "target/classes" "test"]
+             :notify-command ["phantomjs" :cljs.test/runner "target/testable.js"]
+             :compiler {:output-to "target/testable.js"
+                        :output-dir "target/out-test"
+                        :optimizations :whitespace
+                        :pretty-print true}}]}
 
   ; - cljx config -
   :cljx {:builds [{:source-paths ["src/cljx" "src/clj"]
                    :output-path "target/classes"
                    :rules :clj}
-                  {:source-paths ["src/cljx" "src/cljs"]
+                  {:source-paths ["src/cljx"]
                    :output-path "target/classes"
                    :rules :cljs}]})
