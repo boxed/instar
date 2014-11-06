@@ -26,13 +26,13 @@
   ; - clsj config -
   :cljsbuild
   {:builds [{:id "client"
-             :source-paths ["src/cljs" "target/classes"]
+             :source-paths ["target/classes"]
              :compiler {:output-dir "target/client"
                         :output-to "target/client.js"
                         ;;:source-map "target/client.js.map"
                         :pretty-print true}}
             {:id "test"
-             :source-paths ["src/cljs" "target/classes" "test"]
+             :source-paths ["target/classes" "test"]
              :notify-command ["phantomjs" :cljs.test/runner "target/testable.js"]
              :compiler {:output-to "target/testable.js"
                         :output-dir "target/out-test"

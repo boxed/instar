@@ -10,9 +10,6 @@
 (def test-state2 {:foo {:1 {:q1 {:a 1}}, :2 {:q2 2}, :3 {:q3 3}}})
 
 (fact
-  (set (expand-path-once test-state1 [:foo * *])) =>
-     #{[:foo :1 *] [:foo :2 *] [:foo :3 *]}
-
   (expand-path test-state1 [:foo * :q1]) =>
      #{[:foo :1 :q1] [:foo :2 :q1] [:foo :3 :q1]}
   (expand-path test-state1 [:foo *]) =>
