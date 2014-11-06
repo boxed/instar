@@ -11,16 +11,21 @@
     [(into [] a)
      (into [] (drop 1 b))]))
 
+(defn- expand-keys [value]
+  (cond
+   (sequential? value) (range (count value))
+   (associative? value) (keys value)))
+
 (defn index-of [coll val]
   (first (keep-indexed #(when (= val %2) %1) coll)))
 
 (defn expand-path-once [state path]
   (if-let [index-of-star (index-of path STAR)]
-    (let [[path-base path-rest] (split-at-exclusive index-of-star path)]
-      (if (map? (get-in state path-base))
-        (let [ks (keys (get-in state path-base))]
-          (for [k ks]
-            (into (into path-base [k]) path-rest)))
+    (let [[path-base path-rest] (split-at-exclusive index-of-star path)
+          value (get-in state path-base)]
+      (if-let [ks (expand-keys value)]
+        (for [k ks]
+          (into (into path-base [k]) path-rest))
         []))
     [path]))
 
