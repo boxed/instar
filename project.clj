@@ -5,6 +5,7 @@
   :jar-exclusions [#"\.cljx|\.swp|\.swo|\.DS_Store"]
   :profiles {:dev {:dependencies [[midje "1.5.0"]]}}
   :plugins [[com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]
+            [lein-cljsbuild "1.0.4-SNAPSHOT"]
             [lein-midje "3.0.0"]
             [midje-readme "1.0.3"]
             [lein-pdo "0.1.1"]
