@@ -6,6 +6,7 @@
 
 (def test-state1 {:foo {:1 {:q1 1}, :2 {:q2 2}, :3 {:q3 3}}})
 (def test-state2 {:foo {:1 {:q1 {:a 1}}, :2 {:q2 2}, :3 {:q3 3}}})
+(def test-state3 {:foo {:1 [[{:q1 1}]] :2 {:a {:b {:q1 1 :q2 2}}}}})
 
 (deftest inner-functions
   (testing "expand-path works properly"
@@ -22,7 +23,9 @@
     (is (= (expand-path test-state2 [:foo * *])
           #{[:foo :1 :q1] [:foo :2 :q2] [:foo :3 :q3]}))
     (is (= (expand-path test-state2 [:foo * * *])
-          #{[:foo :1 :q1 :a]}))))
+          #{[:foo :1 :q1 :a]}))
+    (is (= (expand-path test-state3 [:foo * * * :q1])
+          #{[:foo :2 :a :b :q1] [:foo :1 0 0 :q1]}))))
 
 (deftest simple-transform
   (testing "simplest transform"
