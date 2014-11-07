@@ -38,7 +38,23 @@
     ;; regex
     (is (= (expand-path {:good {:cat 1 :dog 2 :cat-dog 3} :bad {:catalopse :rawr}}
                         [:good #"cat"])
-           #{[:good :cat] [:good :cat-dog]}))))
+           #{[:good :cat] [:good :cat-dog]}))
+
+    ;; interaction between matching types
+    (is (= (expand-path {:a {"cat" [{"hat" {:b 1} "dot" {:c 3}}
+                                    {"lat" {:e 4} "sat" {:f 2}}
+                                    {"pot" {:a 3}}
+                                    {"bat" {:e 4 :f 3} "dat" {:h 4}}]
+                             "rat" [{"fat" {:o 4}}
+                                    {"pit" {:p 4} "wat" {:a 1 :h 4}}]}}
+                        [:a #"at$" odd? #"at$" *])
+           #{[:a "cat" 1 "lat" :e]
+             [:a "cat" 1 "sat" :f]
+             [:a "cat" 3 "bat" :e]
+             [:a "cat" 3 "bat" :f]
+             [:a "cat" 3 "dat" :h]
+             [:a "rat" 1 "wat" :a]
+             [:a "rat" 1 "wat" :h]}))))
 
 (deftest simple-transform
   (testing "simplest transform"

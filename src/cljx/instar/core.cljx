@@ -50,19 +50,20 @@
   (expand-path-with state path regex? #(re-find %1 (name %2))))
 
 (defn expand-path-once [state path]
-  (cond
-   (some star? path)  (expand-star-path state path)
-   (some fn? path)    (expand-fn-path state path)
-   (some regex? path) (expand-regex-path state path)))
+  (let [crumb (first (filter (or* star? fn? regex?) path))]
+    (cond
+     (fn? crumb)    (expand-fn-path state path)
+     (star? crumb)  (expand-star-path state path)
+     (regex? crumb) (expand-regex-path state path))))
 
 (defn expand-path [state path]
   (let [paths (s/stack [path])
         result (s/stack [])]
     (while (s/not-empty? paths)
       (let [path (s/pop! paths)]
-        (if-not (some (or* star? fn? regex?) path)
-          (s/push! result path)
-          (s/push-all! paths (expand-path-once state path)))))
+        (if-let [expanded (expand-path-once state path)]
+          (s/push-all! paths expanded)
+          (s/push! result path))))
     (s/as-set result)))
 
 (defn resolve-paths-for-transform [m args]
