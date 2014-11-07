@@ -52,8 +52,8 @@
 (defn expand-path-once [state path]
   (let [crumb (first (filter (or* star? fn? regex?) path))]
     (cond
-     (fn? crumb)    (expand-fn-path state path)
      (star? crumb)  (expand-star-path state path)
+     (fn? crumb)    (expand-fn-path state path)
      (regex? crumb) (expand-regex-path state path))))
 
 (defn expand-path [state path]
