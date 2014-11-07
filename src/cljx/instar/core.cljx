@@ -1,5 +1,4 @@
-(ns instar.core
-  (:require [instar.stack :as s]))
+(ns instar.core)
 
 (def ^:private STAR *)
 
@@ -18,12 +17,6 @@
    #+cljs js/RegExp
    path-segment))
 
-(defn- or*
-  "Takes any number of functions and return short-circuiting function
-   that returns the `or` of their values for a given input"
-  [& preds]
-  (fn [x] (reduce #(or %1 (%2 x)) false preds)))
-
 (defn- expand-keys [value]
   (cond (sequential? value) (range (count value))
         (associative? value) (keys value)))
@@ -31,48 +24,27 @@
 (defn index-of [coll val]
   (first (keep-indexed #(when (= val %2) %1) coll)))
 
-(defn expand-path-with [state path match? keep?]
-  (let [crumb (first (filter match? path))
-        index (index-of path crumb)
-        [a z] (split-at-exclusive index path)
-        value (get-in state a)]
-    (if-let [ks (filter #(keep? crumb %) (expand-keys value))]
-      (for [k ks] (into (into a [k]) z))
+(defn expand-path-with [state base keep?]
+  (let [value (get-in state base)]
+    (if-let [ks (filter #(keep? %) (expand-keys value))]
+      (for [k ks] (into base [k]))
       [])))
 
-(defn expand-star-path [state path]
-  (expand-path-with state path star? (constantly true)))
-
-(defn expand-fn-path [state path]
-  (expand-path-with state path fn? #(%1 %2)))
-
-(defn expand-regex-path [state path]
-  (expand-path-with state path regex? #(re-find %1 (name %2))))
-
-(defn expand-path-once [state path]
-  (let [crumb (first (filter (or* star? fn? regex?) path))]
-    (cond
-     (star? crumb)  (expand-star-path state path)
-     (fn? crumb)    (expand-fn-path state path)
-     (regex? crumb) (expand-regex-path state path))))
-
 (defn expand-path [state path]
-  (let [paths (s/stack [path])
-        result (s/stack [])]
-    (while (s/not-empty? paths)
-      (let [path (s/pop! paths)]
-        (if-let [expanded (expand-path-once state path)]
-          (s/push-all! paths expanded)
-          (s/push! result path))))
-    (s/as-set result)))
+  (letfn [(expand-path-once [base crumb]
+            (cond
+             (star? crumb)  (expand-path-with state base (constantly true))
+             (fn? crumb)    (expand-path-with state base crumb)
+             (regex? crumb) (expand-path-with state base #(re-find crumb (name %)))
+             :default       [(conj base crumb)]))
+          (expand-paths-once [base-paths crumb]
+            (into #{} (mapcat #(expand-path-once % crumb) base-paths)))]
+    (reduce expand-paths-once #{[]} path)))
 
 (defn resolve-paths-for-transform [m args]
-  (let [pairs (partition 2 args)
-        result (s/stack [])]
-    (doseq [[p f] pairs]
-      (doseq [p (expand-path m p)]
-        (s/push-all! result [p f])))
-    (s/as-vector result)))
+  (let [pairs  (partition 2 args)
+        expand (fn [[p f]] (mapcat #(vector % f) (expand-path m p)))]
+    (into [] (mapcat expand pairs))))
 
 (defn transform-resolved-paths [m args]
   (let [pairs (partition 2 args)]
