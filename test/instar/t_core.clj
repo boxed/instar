@@ -1,4 +1,5 @@
 (ns instar.t-core
+  (:refer-clojure :exclude [record?])
   (:use midje.sweet)
   (:use [instar.core]))
 
