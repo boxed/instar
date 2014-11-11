@@ -36,8 +36,8 @@ Wildcards makes updating multiple values easy:
 ```clojure
 (transform {:foo {:bar {:baz 1, :qux 4}
                   :bar2 {:baz 2, :qux 5}}}
-           [:foo * *] inc)  
-=> 
+           [:foo * *] inc)
+=>
 {:foo {:bar {:baz 2, :qux 5},
        :bar2 {:baz 3, :qux 6}}}
 ```
@@ -50,7 +50,7 @@ Besides the flambouyant match-all asterisk, regular expressions can be used for 
            [:foo #"^ba" #"^ba"] inc)
 =>
 {:foo {:bar {:baz 2, :qux 4},
-       :bar2 {:baz 2, :qux 5}}}
+       :zip {:baz 2, :qux 5}}}
 ```
 
 Key is neither string nor keyword?
@@ -60,12 +60,12 @@ Require a more delicate touch?
 Clojure functions are treated as match predicates:
 
 ```clojure
-(transform {:vector [0 1 2 3 4 5 6]
+(transform {:vector [0 1 2 3 4 5 6]}
             [:vector odd?] inc)
 =>
 {:vector [0 2 2 4 4 6 6]}
 
-(transform {:map {"a" 1, "ab" 2, "abc" 3}
+(transform {:map {"a" 1, "ab" 2, "abc" 3}}
            [:map (comp even? count)] inc)
 =>
 {:map {"a" 1, "ab", 3, "abc", 3}}
@@ -79,7 +79,7 @@ And the coup de grâce, the combination of all of the above:
            [:foo keyword? #"qu+x"] inc
            [:foobar] "hello"
            [:foo :bar :baz] dissoc)
-=> 
+=>
 {:foo {:bar {:qux 6, :quux 9}}, :foobar "hello"}
 ```
 
