@@ -42,7 +42,7 @@ Wildcards makes updating multiple values easy:
        :bar2 {:baz 3, :qux 6}}}
 ```
 
-Besides the flambouyant match-all asterisk, regular expressions can be used for more focused matches:
+Besides the flamboyant match-all asterisk, regular expressions can be used for more focused matches:
 
 ```clojure
 (transform {:foo {:bar {:baz 1, :qux 4}
