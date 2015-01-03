@@ -6,6 +6,9 @@
 
 (defn- noop [x] x)
 
+(defn- name* [x]
+  (if (number? x) (str x) (name x)))
+
 (defn- split-at-exclusive [index path]
   (let [[a b] (split-at index path)]
     [(into [] a)
@@ -35,7 +38,7 @@
             (cond
              (star? crumb)  (expand-path-with state base (constantly true))
              (fn? crumb)    (expand-path-with state base crumb)
-             (regex? crumb) (expand-path-with state base #(re-find crumb (name %)))
+             (regex? crumb) (expand-path-with state base #(re-find crumb (name* %)))
              :default       [(conj base crumb)]))
           (expand-paths-once [base-paths crumb]
             (into #{} (mapcat #(expand-path-once % crumb) base-paths)))]
