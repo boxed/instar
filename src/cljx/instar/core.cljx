@@ -4,6 +4,17 @@
 
 (def ^:private star? #{STAR})
 
+(def ^:private CAPTURE_WITH_RESOLUTION (quote %>))
+
+(def ^:private CAPTURE_WITHOUT_RESOLUTION (quote %%))
+
+(def ^:private capture-symbol? #{CAPTURE_WITH_RESOLUTION CAPTURE_WITHOUT_RESOLUTION})
+
+(defn- capture?
+  "Determine if crumb is a capture form"
+  [crumb]
+  (and (vector? crumb)
+       (capture-symbol? (first crumb))))
 
 (defn- name* [x]
   (if (number? x) (str x) (name x)))
@@ -43,6 +54,41 @@
             (into #{} (mapcat #(expand-path-once % crumb) base-paths)))]
     (reduce expand-paths-once #{[]} path)))
 
+(defn expand-path-with-capture
+  "WIP"
+  [state path]
+  (letfn [(expand-path-once [base crumb]
+            (let [base (vec base)]
+              (cond
+               (star? crumb)  (expand-path-with state base (constantly true))
+               (fn? crumb)    (expand-path-with state base crumb)
+               (regex? crumb) (expand-path-with state base #(re-find crumb (name* %)))
+               :default       [(conj base crumb)])))
+          (expand-capture-path [[base captures] [type & path]]
+            (let [captures (vec captures)]
+              ;; wildcards do not make sense for non-resolving capture
+              (if (= CAPTURE_WITHOUT_RESOLUTION type)
+                (assert (not-any? #(or (star? %) (fn? %) (regex? %)) path)))
+              (let [next-paths (reduce expand-paths-once #{[base captures]} path)
+                    values     (map #(if % (get-in state (first %))) next-paths)]
+                (into #{}
+                      (if (= CAPTURE_WITH_RESOLUTION type)
+                        (remove nil?
+                                (map (fn [next-path value]
+                                       (if next-path
+                                         [(first next-path) (conj captures value)]))
+                                     next-paths values))
+                        ;; leverage values has length at most 1 without wildcards
+                        [[base (conj captures (first values))]])))))
+          (expand-paths-once [base-paths-with-captures crumb]
+            (if (capture? crumb)
+              (into #{} (mapcat #(expand-capture-path % crumb) base-paths-with-captures))
+              (into #{} (mapcat #(map vector
+                                      (expand-path-once (first %) crumb)
+                                      (repeat (second %)))
+                                base-paths-with-captures))))]
+    (reduce expand-paths-once #{[]} path)))
+
 (defn resolve-paths-for-transform [m args]
   (let [pairs  (partition 2 args)
         expand (fn [[p f]] (mapcat #(vector % f) (expand-path m p)))]
@@ -61,6 +107,19 @@
          (assoc-in state path f)))
      m
      pairs)))
+
+
+;;; Public API
+
+(defn %>
+  "Syntax sugar for marking crumb for capture, with resolution"
+  [crumb]
+  [CAPTURE_WITH_RESOLUTION crumb])
+
+(defn %%
+  "Syntax sugar for marking crumb(s) for capture, without resolution"
+  [& crumbs]
+  (into [CAPTURE_WITHOUT_RESOLUTION] crumbs))
 
 (defn transform [m & args]
   (let [x (resolve-paths-for-transform m args)]
