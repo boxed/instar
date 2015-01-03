@@ -2,7 +2,7 @@
   (:require-macros [cemerick.cljs.test
                     :refer (is deftest with-test run-tests testing test-var)])
   (:require [cemerick.cljs.test :as t]
-            [instar.core :refer [transform expand-path]]))
+            [instar.core :refer [transform expand-path get-values-in-paths]]))
 
 (def test-state1 {:foo {:1 {:q1 1}, :2 {:q2 2}, :3 {:q3 3}}})
 (def test-state2 {:foo {:1 {:q1 {:a 1}}, :2 {:q2 2}, :3 {:q3 3}}})
@@ -57,3 +57,21 @@
   (testing "simplest transform"
     (is (= (transform {} [:test] 1)
            {:test 1}))))
+
+(deftest get-values
+  (testing "get-values-in-paths"
+    (is (= (get-values-in-paths {:a {:b [:c :d]
+                                     :e #{:f}}
+                                 :b {:b [:a :b]
+                                     :h #{:f :g}}}
+                                [:a * #"\w"]
+                                [* :b 1]
+                                [* * :f])
+           ;; not especially pleased by the nils, as :f cannot key vector
+           ;; consider:
+           ;; (transform {:a {:b [:c :d]
+           ;;                 :e #{:f}}
+           ;;             :b {:b [:a :b]
+           ;;                 :h #{:f :g}}}
+           ;;            [* * :f] 3)
+           [:c :d :d :b nil :f nil :f]))))
