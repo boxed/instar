@@ -100,6 +100,51 @@ You can also use instar for getting deep values, either with pairs of [path valu
 [1 4 7]
 ```
 
+The notion of capture groups is also supported, using the special functions `%>`
+and `%%`. Both of these will read the value , and these captured values are then
+passed to the transformation functions as additional arguments.
+
+The two capture types differ around whether their enclosed path segment becomes
+part of the transformation path or not. These are referred to as "resolving" and
+"non-resolving" capture respectively. The non-resolving form is useful for
+capturing values from siblings outside of the fully resolved path.
+
+
+Use `%%` for non-resolving capture, and `%>` for the resolving variant, as
+demonstrated below:
+
+
+```clojure
+(transform {:users [{:name "Dan", :age 23}
+                    {:name "Sam", :gender :female}]}
+           [:users (%> *) :keys] (fn [_ user] (keys user)))
+=>
+{:users [{:name "Dan", :age 23, :keys '(:age :name)}
+          {:name "Sam", :gender :female, :keys '(:name :gender)}]}
+
+
+(:users
+  (transform {:users [{:name "Dan", :age 23}
+                      {:name "Sam", :gender :female}]
+              :aliases {"Dan" ["Dante" "Daniel"]
+                        "Sam" ["Samantha", "Samoth"]}}
+    [(%% :aliases) :users * (%% :name)]
+      (fn [user aliases name] (assoc user :aliases (aliases name)))))
+=>
+[{:name "Dan", :age 23,         :aliases ["Dante" "Daniel"]}
+ {:name "Sam", :gender :female, :aliases ["Samantha", "Samoth"]}]
+```
+
+Note also that the non-resolving capture can conveniently support multiple segments:
+
+```clojure
+(transform {:a {:b {:c 42}}}
+           [(%% :a :b :c) :d :e :f] vector)
+=>
+{:a {:b {:c 42}}, :d {:e {:f [nil 42]}}}
+```
+
+
 ## Installation
 
 Add the following dependency to your `project.clj` file:
