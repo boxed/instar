@@ -92,7 +92,7 @@
             :e {"a"   1
                 "aa"  {"a" 1 "aa" 2 "aaa" 3}
                 "aaa" {"a" 1 "aa" 2 "aaa" 3}}
-            ;; note that all captures happen before all transformations
+            ;; note all captures happen before any updates
             :f 1}))))
 
 (deftest get-values

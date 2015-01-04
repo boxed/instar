@@ -1,30 +1,33 @@
 (ns instar.t-core
   (:refer-clojure :exclude [record?])
   (:use midje.sweet)
-  (:require [instar.core :refer [transform
-                                 get-in-paths
-                                 get-values-in-paths
-                                 resolve-paths-for-transform]]))
+  (:require [instar.core :refer :all]))
 
 (def test-state1 {:foo {:1 {:q1 1}, :2 {:q2 2}, :3 {:q3 3}}})
 (def test-state2 {:foo {:1 {:q1 {:a 1}}, :2 {:q2 2}, :3 {:q3 3}}})
 
 ;; test shims
 
-(defn expand-path [state path]
-  (map :path (instar.core/expand-path state path)))
+(defn expand-path- [state path]
+  (map :path (expand-path state path)))
+
+(defn second-arg [_ x] x)
 
 (fact
-  (expand-path test-state1 [:foo * :q1]) =>
+  (expand-path- test-state1 [:foo * :q1]) =>
      [[:foo :1 :q1] [:foo :2 :q1] [:foo :3 :q1]]
-  (expand-path test-state1 [:foo *]) =>
+  (expand-path- test-state1 [:foo *]) =>
      [[:foo :1] [:foo :2] [:foo :3]]
-  (expand-path :_ [:foo :bar]) =>
+  (expand-path- :_ [:foo :bar]) =>
      [[:foo :bar]]
-  (expand-path test-state2 [:foo * *]) =>
+  (expand-path- test-state2 [:foo * *]) =>
      [[:foo :1 :q1] [:foo :2 :q2] [:foo :3 :q3]]
-  (expand-path test-state2 [:foo * * *]) =>
+  (expand-path- test-state2 [:foo * * *]) =>
      [[:foo :1 :q1 :a]]
+
+  ;; construct using assoc to ensure internal ordering of keys in [:foo :bar]
+  (expand-path- (assoc nil :bar 2 :foo 1) [*]) =>
+     [[:foo] [:bar]]
 
   (resolve-paths-for-transform test-state2 [[:foo * * *] identity]) =>
      [{:path [:foo :1 :q1 :a], :f identity}]
@@ -32,11 +35,7 @@
   (map :path (resolve-paths-for-transform test-state1 [[* * *] identity])) =>
      [[:foo :1 :q1]
       [:foo :2 :q2]
-      [:foo :3 :q3]]
-
-  ;; construct using assoc to ensure internal ordering of keys in [:foo :bar]
-  (expand-path (assoc nil :bar 2 :foo 1) [*]) =>
-     [[:foo] [:bar]])
+      [:foo :3 :q3]])
 
 (fact
  (transform test-state1
@@ -53,8 +52,7 @@
   (into #{} (get-in-paths test-state1
                           [* * *])) =>  #{[[:foo :3 :q3] 3] [[:foo :1 :q1] 1] [[:foo :2 :q2] 2]}
   (into #{} (get-values-in-paths test-state1
-                          [* * *])) =>  #{3 1 2}
- )
+                          [* * *])) =>  #{3 1 2})
 
 ; This example is based on a use case from https://github.com/boxed/atpshowbot
 
@@ -100,7 +98,33 @@
                   (dissoc :voters)
                   (dissoc :author-ip))
     [:links] #(for [[x y z] %] [x y])) => target-state
- )
+
+  ;; Same as above...
+  (transform state
+    [:votes * (%% :voters) :votes] #(count %2)
+    [:votes * (%% :voters) :did-vote] #(contains? %2 "not-a-matching-ip")
+    [:votes * :voters] dissoc
+    [:votes * :author-ip] dissoc
+    [:links] #(for [[x y z] %] [x y])))
 
 (fact
   (transform {} [:test] 1) => {:test 1})
+
+(fact
+ (transform
+  {:a 1
+   :b (vec (range 3))
+   :c {:d 0}
+   :e {"a" 1 "aa" 2 "aaa" 3} }
+
+  [:a] 9
+  [:b *] inc
+  [:c] dissoc
+  [(%% :a) :f] second-arg
+  [(%> :e) #"^\w{2,3}$"] second-arg) => {:a 9
+                                         :b (range 1 4)
+                                         :e {"a"   1
+                                             "aa"  {"a" 1 "aa" 2 "aaa" 3}
+                                             "aaa" {"a" 1 "aa" 2 "aaa" 3}}
+                                         ;; note all captures happen before any updates
+                                         :f 1})
