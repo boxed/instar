@@ -89,14 +89,15 @@ You can also use instar for getting deep values, either with pairs of [path valu
 (get-in-paths {:foo {:bar {:baz 1, :qux 4, :quux 7}}}
               [:foo * *])
 =>
-[[[:foo :bar :quux] 7]
+[[[:foo :bar :baz] 1]
  [[:foo :bar :qux] 4]
- [[:foo :bar :baz] 1]]
+ [[:foo :bar :quux] 7]]
+
 
 (get-values-in-paths {:foo {:bar {:baz 1, :qux 4, :quux 7}}}
                      [:foo * *])
 =>
-[7 4 1]
+[1 4 7]
 ```
 
 ## Installation
