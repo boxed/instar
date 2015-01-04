@@ -100,6 +100,8 @@ You can also use instar for getting deep values, either with pairs of [path valu
 [1 4 7]
 ```
 
+### Capture groups
+
 The notion of capture groups is also supported, using the special functions `%>`
 and `%%`. Both of these will read the value , and these captured values are then
 passed to the transformation functions as additional arguments.
@@ -176,8 +178,8 @@ This is the transformation to do that:
 
 ```clojure
 (transform big-map
-  [:votes *] #(assoc %1 :votes (count (:voters %1)))
-  [:votes *] #(assoc %1 :did-vote (contains? (:voters %1) "74.125.232.96"))
+  [:votes (%> *) :votes] #(count (:voters %2))
+  [:votes (%> *) :did-vote] #(contains? (:voters %2) "74.125.232.96")
   [:votes * :voters] dissoc
   [:votes * :author-ip] dissoc
   [:links] #(for [[x y z] %] [x y]))
