@@ -4,7 +4,9 @@
 
 (def ^:private star? #{STAR})
 
-(defn- noop [x] x)
+
+(defn- name* [x]
+  (if (number? x) (str x) (name x)))
 
 (defn- split-at-exclusive [index path]
   (let [[a b] (split-at index path)]
@@ -35,7 +37,7 @@
             (cond
              (star? crumb)  (expand-path-with state base (constantly true))
              (fn? crumb)    (expand-path-with state base crumb)
-             (regex? crumb) (expand-path-with state base #(re-find crumb (name %)))
+             (regex? crumb) (expand-path-with state base #(re-find crumb (name* %)))
              :default       [(conj base crumb)]))
           (expand-paths-once [base-paths crumb]
             (into #{} (mapcat #(expand-path-once % crumb) base-paths)))]
@@ -65,11 +67,8 @@
     (transform-resolved-paths m x)))
 
 (defn get-in-paths [m & args]
-  (let [args-with-bogus-op (apply concat (for [arg args] [arg noop])) ; ..because resolve-paths-for-transform expects pairs
-        paths (resolve-paths-for-transform m args-with-bogus-op)]
-    (for [[p _] (partition 2 paths)]
-      [p (get-in m p)])))
+  (for [path (mapcat (partial expand-path m) args)]
+    [path (get-in m path)]))
 
 (defn get-values-in-paths [& args]
-  (for [[path value] (apply get-in-paths args)]
-    value))
+  (map second (apply get-in-paths args)))
