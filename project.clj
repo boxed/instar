@@ -7,7 +7,7 @@
   :plugins [[com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]
             [lein-cljsbuild "1.0.4-SNAPSHOT"]
             [lein-midje "3.0.0"]
-            [midje-readme "1.0.4"]
+            [midje-readme "1.0.5"]
             [lein-pdo "0.1.1"]
             [com.cemerick/clojurescript.test "0.3.1"]]
   :uberjar-name "instar.jar"
