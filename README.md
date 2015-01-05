@@ -102,15 +102,14 @@ You can also use instar for getting deep values, either with pairs of [path valu
 
 ### Capture groups
 
-The notion of capture groups is also supported, using the special functions `%>`
-and `%%`. Both of these will read the value , and these captured values are then
-passed to the transformation functions as additional arguments.
+Capture can be performed using the functions `%>`and `%%`, which will replace
+the regular argument to any transforming functions (the data being transformed)
+with the value captured at that point in the path. Note that multiple
+captures can be used, which will then form additional arguments to the function.
 
 The two capture types differ around whether their enclosed path segment becomes
-part of the transformation path or not. These are referred to as "resolving" and
-"non-resolving" capture respectively. The non-resolving form is useful for
+part of the transformation path. The non-resolving form is useful for
 capturing values from siblings outside of the fully resolved path.
-
 
 Use `%%` for non-resolving capture, and `%>` for the resolving variant, as
 demonstrated below:
