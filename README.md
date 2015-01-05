@@ -102,15 +102,14 @@ You can also use instar for getting deep values, either with pairs of [path valu
 
 ### Capture groups
 
-The notion of capture groups is also supported, using the special functions `%>`
-and `%%`. Both of these will read the value , and these captured values are then
-passed to the transformation functions as additional arguments.
+Capture can be performed using the functions `%>`and `%%`, which will replace
+the regular argument to any transforming functions (the data being transformed)
+with the value captured at that point in the path. Note that multiple
+captures can be used, which will then form additional arguments to the function.
 
 The two capture types differ around whether their enclosed path segment becomes
-part of the transformation path or not. These are referred to as "resolving" and
-"non-resolving" capture respectively. The non-resolving form is useful for
+part of the transformation path. The non-resolving form is useful for
 capturing values from siblings outside of the fully resolved path.
-
 
 Use `%%` for non-resolving capture, and `%>` for the resolving variant, as
 demonstrated below:
@@ -119,7 +118,7 @@ demonstrated below:
 ```clojure
 (transform {:users [{:name "Dan", :age 23}
                     {:name "Sam", :gender :female}]}
-           [:users (%> *) :keys] (fn [_ user] (keys user)))
+           [:users (%> *) :keys] keys)
 =>
 {:users [{:name "Dan", :age 23, :keys '(:age :name)}
           {:name "Sam", :gender :female, :keys '(:name :gender)}]}
@@ -130,8 +129,8 @@ demonstrated below:
                       {:name "Sam", :gender :female}]
               :aliases {"Dan" ["Dante" "Daniel"]
                         "Sam" ["Samantha", "Samoth"]}}
-    [(%% :aliases) :users * (%% :name)]
-      (fn [user aliases name] (assoc user :aliases (aliases name)))))
+    [(%% :aliases) :users (%> *) (%% :name)]
+      (fn [aliases user name] (assoc user :aliases (aliases name)))))
 =>
 [{:name "Dan", :age 23,         :aliases ["Dante" "Daniel"]}
  {:name "Sam", :gender :female, :aliases ["Samantha", "Samoth"]}]
@@ -143,7 +142,7 @@ Note also that the non-resolving capture can conveniently support multiple segme
 (transform {:a {:b {:c 42}}}
            [(%% :a :b :c) :d :e :f] vector)
 =>
-{:a {:b {:c 42}}, :d {:e {:f [nil 42]}}}
+{:a {:b {:c 42}}, :d {:e {:f [42]}}}
 ```
 
 
@@ -178,8 +177,8 @@ This is the transformation to do that:
 
 ```clojure
 (transform big-map
-  [:votes (%> *) :votes] #(count (:voters %2))
-  [:votes (%> *) :did-vote] #(contains? (:voters %2) "74.125.232.96")
+  [:votes (%> *) :votes] #(count (:voters %))
+  [:votes (%> *) :did-vote] #(contains? (:voters %) "74.125.232.96")
   [:votes * :voters] dissoc
   [:votes * :author-ip] dissoc
   [:links] #(for [[x y z] %] [x y]))

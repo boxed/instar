@@ -13,8 +13,6 @@
   [state path]
   (into #{} (map :path (instar/expand-path state path))))
 
-(defn- second-arg [_ x] x)
-
 (deftest inner-functions
   (testing "expand-path works properly"
 
@@ -84,8 +82,8 @@
             [:a] 9
             [:b *] inc
             [:c] dissoc
-            [(%% :a) :f] second-arg
-            [(%> :e) #"^\w{2,3}$"] second-arg)
+            [(%% :a) :f] identity
+            [(%> :e) #"^\w{2,3}$"] identity)
 
            {:a 9
             :b (range 1 4)

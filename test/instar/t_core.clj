@@ -11,8 +11,6 @@
 (defn expand-path- [state path]
   (map :path (expand-path state path)))
 
-(defn second-arg [_ x] x)
-
 (fact
   (expand-path- test-state1 [:foo * :q1]) =>
      [[:foo :1 :q1] [:foo :2 :q1] [:foo :3 :q1]]
@@ -101,8 +99,8 @@
 
   ;; Same as above...
   (transform state
-    [:votes * (%% :voters) :votes] #(count %2)
-    [:votes * (%% :voters) :did-vote] #(contains? %2 "not-a-matching-ip")
+    [:votes * (%% :voters) :votes] count
+    [:votes * (%% :voters) :did-vote] #(contains? % "not-a-matching-ip")
     [:votes * :voters] dissoc
     [:votes * :author-ip] dissoc
     [:links] #(for [[x y z] %] [x y])))
@@ -120,8 +118,8 @@
   [:a] 9
   [:b *] inc
   [:c] dissoc
-  [(%% :a) :f] second-arg
-  [(%> :e) #"^\w{2,3}$"] second-arg) => {:a 9
+  [(%% :a) :f] identity
+  [(%> :e) #"^\w{2,3}$"] identity) => {:a 9
                                          :b (range 1 4)
                                          :e {"a"   1
                                              "aa"  {"a" 1 "aa" 2 "aaa" 3}

@@ -87,7 +87,9 @@
          (if (= (count path) 1) ; update-in doesn't support empty path: http://dev.clojure.org/jira/browse/CLJ-373
            (dissoc state (last path))
            (update-in state (drop-last 1 path) #(dissoc % (last path))))
-         (apply update-in state path f captures))
+         (if (seq captures)
+           (assoc-in state path (apply f captures))
+           (update-in state path f)))
        (assoc-in state path f)))
    m
    path-transforms))
