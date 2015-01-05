@@ -3,11 +3,11 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2371"]]
   :jar-exclusions [#"\.cljx|\.swp|\.swo|\.DS_Store"]
-  :profiles {:dev {:dependencies [[midje "1.5.0"]]}}
+  :profiles {:dev {:dependencies [[midje "1.6.3"]]}}
   :plugins [[com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]
             [lein-cljsbuild "1.0.4-SNAPSHOT"]
             [lein-midje "3.0.0"]
-            [midje-readme "1.0.3"]
+            [midje-readme "1.0.4"]
             [lein-pdo "0.1.1"]
             [com.cemerick/clojurescript.test "0.3.1"]]
   :uberjar-name "instar.jar"
