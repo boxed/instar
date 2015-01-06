@@ -1,4 +1,4 @@
-(defproject instar "1.0.9"
+(defproject instar "1.0.10"
   :description "Simpler and more powerful assoc/dissoc/update-in"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2371"]]
@@ -17,7 +17,7 @@
   :url "https://github.com/boxed/instar"
   :scm {:name "git"
         :url "https://github.com/boxed/instar"}
-  :deploy-repositories [["clojars" {:creds :gpg}]]
+  :deploy-repositories [["clojars" {:creds :gpg}] ["releases" :clojars]]
 
   :hooks [cljx.hooks]
 
