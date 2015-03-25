@@ -1,15 +1,15 @@
 (defproject instar "1.0.11-SNAPSHOT"
   :description "Simpler and more powerful assoc/dissoc/update-in"
-  :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2371"]]
+  :dependencies [[org.clojure/clojure "1.6.0"]]
   :jar-exclusions [#"\.cljx|\.swp|\.swo|\.DS_Store"]
-  :profiles {:dev {:dependencies [[midje "1.6.3"]]}}
-  :plugins [[com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]
-            [lein-cljsbuild "1.0.4-SNAPSHOT"]
-            [lein-midje "3.0.0"]
-            [midje-readme "1.0.5"]
+  :profiles {:dev {:dependencies [[midje "1.6.3"]
+                                  [org.clojure/clojurescript "0.0-3153"]]}}
+  :plugins [[com.keminglabs/cljx "0.6.0" :exclusions [org.clojure/clojure]]
+            [lein-cljsbuild "1.0.5"]
+            [lein-midje "3.1.3"]
+            [midje-readme "1.0.7"]
             [lein-pdo "0.1.1"]
-            [com.cemerick/clojurescript.test "0.3.1"]]
+            [com.cemerick/clojurescript.test "0.3.3"]]
   :uberjar-name "instar.jar"
 
   :license {:name "MIT"
@@ -19,7 +19,7 @@
         :url "https://github.com/boxed/instar"}
   :deploy-repositories [["clojars" {:creds :gpg}] ["releases" :clojars]]
 
-  :hooks [cljx.hooks]
+  :prep-tasks [["cljx" "once"]]
 
   :source-paths ["src/clj" "src/cljs" "target/classes"]
 
