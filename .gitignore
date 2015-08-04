@@ -4,3 +4,4 @@ target
 pom.xml
 test/readme.clj
 pom.xml.asc
+.lein-*
