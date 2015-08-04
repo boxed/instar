@@ -25,7 +25,7 @@
 
   ;; construct using assoc to ensure internal ordering of keys in [:foo :bar]
   (expand-path- (assoc nil :bar 2 :foo 1) [*]) =>
-     [[:foo] [:bar]]
+     [[:bar] [:foo]]
 
   (resolve-paths-for-transform test-state2 [[:foo * * *] identity]) =>
      [{:path [:foo :1 :q1 :a], :f identity}]

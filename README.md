@@ -122,7 +122,7 @@ demonstrated below:
                     {:name "Sam", :gender :female}]}
            [:users (%> *) :keys] keys)
 =>
-{:users [{:name "Dan", :age 23, :keys '(:age :name)}
+{:users [{:name "Dan", :age 23, :keys '(:name :age)}
           {:name "Sam", :gender :female, :keys '(:name :gender)}]}
 
 
