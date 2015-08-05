@@ -1,13 +1,13 @@
 (defproject instar "1.0.11-SNAPSHOT"
   :description "Simpler and more powerful assoc/dissoc/update-in"
-  :dependencies [[org.clojure/clojure "1.6.0"]]
+  :dependencies [[org.clojure/clojure "1.7.0" :scope "provided"]]
   :jar-exclusions [#"\.cljx|\.swp|\.swo|\.DS_Store"]
-  :profiles {:dev {:dependencies [[midje "1.6.3"]
-                                  [org.clojure/clojurescript "0.0-3153"]]}}
+  :profiles {:dev {:dependencies [[midje "1.7.0"]
+                                  [org.clojure/clojurescript "1.7.28"]]}}
   :plugins [[com.keminglabs/cljx "0.6.0" :exclusions [org.clojure/clojure]]
-            [lein-cljsbuild "1.0.5"]
+            [lein-cljsbuild "1.0.6"]
             [lein-midje "3.1.3"]
-            [midje-readme "1.0.7"]
+            [midje-readme "1.0.8"]
             [lein-pdo "0.1.1"]
             [com.cemerick/clojurescript.test "0.3.3"]]
   :uberjar-name "instar.jar"
